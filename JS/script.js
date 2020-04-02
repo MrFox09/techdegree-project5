@@ -102,6 +102,11 @@ const modalHTML = (user) => {
         // convert birthdate from JSON to JS
         const birthdayJSON = user.dob.date;
         const birthdayJS = new Date(birthdayJSON);
+        const year = birthdayJS.getFullYear();
+        const date = birthdayJS.getDate();
+        const month = birthdayJS.getMonth();
+
+        // create the Pop Up Window
 
         modalDiv.innerHTML = `<div class="modal">
             <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
@@ -112,11 +117,28 @@ const modalHTML = (user) => {
                 <p class="modal-text cap">${user.location.city}</p>
                 <hr>
                 <p class="modal-text">${user.phone}</p>
-                <p class="modal-text">${user.location.street}, ${user.location.state} ${user.location.postcode}</p>
-                <p class="modal-text">Birthday: ${birthdayJS}</p>
-            </div>`;
+                <p class="modal-text">${user.location.street.number} ${user.location.street.name} , ${user.location.state} ${user.location.postcode}</p>
+                <p class="modal-text">Birthday: ${year}/${date}/${month}</p>
+            </div>
+
+            <div class="modal-btn-container">
+                <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+                <button type="button" id="modal-next" class="modal-next btn">Next</button>
+            </div>
+        </div>`;
 
       document.body.appendChild(modalDiv);
+
+      // Event listener for the X button
+
+      document.getElementById('modal-close-btn').addEventListener('click', ()=>{
+        modalDiv.remove();
+
+      });
+
+      // Event listener for prev, next button
+
+
 
 
 
@@ -132,8 +154,10 @@ call galleryHTML function for every user
 
 
 fetchUser('https://randomuser.me/api/?results=12')
+  //.then(data => console.log(data))
 
   .then((data) => {
+
 
     data.forEach(user => {
       galleryHTML(user);
