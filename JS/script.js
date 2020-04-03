@@ -105,6 +105,75 @@ const galleryHTML = (user) => {
 };
 
 
+
+
+const modalHTML = (user) => {
+
+
+  const modalDiv = document.createElement('div');
+  modalDiv.setAttribute('class', 'modal-container');
+
+  // convert birthdate from JSON to JS
+  const birthdayJSON = user.dob.date;
+  const birthdayJS = new Date(birthdayJSON);
+  const year = birthdayJS.getFullYear();
+  const date = birthdayJS.getDate();
+  const month = birthdayJS.getMonth();
+
+  // create the Pop Up Windows
+
+  modalDiv.innerHTML = `<div class="modal">
+            <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
+            <div class="modal-info-container">
+                <img class="modal-img" src= ${user.picture.large} alt="profile picture">
+                <h3 id="name" class="modal-name cap">${user.name.first} ${user.name.last}</h3>
+                <p class="modal-text">${user.email}</p>
+                <p class="modal-text cap">${user.location.city}</p>
+                <hr>
+                <p class="modal-text">${user.phone}</p>
+                <p class="modal-text">${user.location.street.number} ${user.location.street.name} , ${user.location.state} ${user.location.postcode}</p>
+                <p class="modal-text">Birthday: ${year}/${date}/${month}</p>
+            </div>
+
+            <div class="modal-btn-container">
+                <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+                <button type="button" id="modal-next" class="modal-next btn">Next</button>
+            </div>
+        </div>`;
+
+  document.body.appendChild(modalDiv);
+
+    // Event listeners
+
+  // X button remove the modalDiv
+
+  document.getElementById('modal-close-btn').addEventListener('click', () => {
+    modalDiv.remove();
+
+  });
+
+
+  // prev button, remove the curren modalDiv and call the toggle function with the direction as
+  // an argument
+
+  document.getElementById('modal-prev').addEventListener('click', () => {
+    modalDiv.remove();
+    toggle('prev');
+
+  });
+
+  // next button,remove the curren modalDiv and call the toggle function with the direction as
+  // an argument
+
+  document.getElementById('modal-next').addEventListener('click', (e) => {
+    modalDiv.remove();
+    toggle('next');
+
+  });
+
+};
+
+
 /***
 
 when the card is clicked the findIndex function will run till the name matches in the currentUser array,
@@ -151,73 +220,6 @@ function toggle(direction) {
 }
 
 
-const modalHTML = (user) => {
-
-
-  const modalDiv = document.createElement('div');
-  modalDiv.setAttribute('class', 'modal-container');
-
-  // convert birthdate from JSON to JS
-  const birthdayJSON = user.dob.date;
-  const birthdayJS = new Date(birthdayJSON);
-  const year = birthdayJS.getFullYear();
-  const date = birthdayJS.getDate();
-  const month = birthdayJS.getMonth();
-
-  // create the Pop Up Windows
-
-  modalDiv.innerHTML = `<div class="modal">
-            <button type="button" id="modal-close-btn" class="modal-close-btn"><strong>X</strong></button>
-            <div class="modal-info-container">
-                <img class="modal-img" src= ${user.picture.large} alt="profile picture">
-                <h3 id="name" class="modal-name cap">${user.name.first} ${user.name.last}</h3>
-                <p class="modal-text">${user.email}</p>
-                <p class="modal-text cap">${user.location.city}</p>
-                <hr>
-                <p class="modal-text">${user.phone}</p>
-                <p class="modal-text">${user.location.street.number} ${user.location.street.name} , ${user.location.state} ${user.location.postcode}</p>
-                <p class="modal-text">Birthday: ${year}/${date}/${month}</p>
-            </div>
-
-            <div class="modal-btn-container">
-                <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
-                <button type="button" id="modal-next" class="modal-next btn">Next</button>
-            </div>
-        </div>`;
-
-  document.body.appendChild(modalDiv);
-
-  // Event listener for the X button
-
-  document.getElementById('modal-close-btn').addEventListener('click', () => {
-    modalDiv.remove();
-
-  });
-
-  // Event listener
-
-  // prev button
-
-  document.getElementById('modal-prev').addEventListener('click', () => {
-    modalDiv.remove();
-    toggle('prev');
-
-
-  });
-
-  // next button
-
-  document.getElementById('modal-next').addEventListener('click', (e) => {
-    modalDiv.remove();
-    toggle('next');
-
-  });
-
-};
-
-
-
-
 
 /***
 
@@ -261,9 +263,12 @@ searchForm.innerHTML = `<input type="search" id="search-input" class="search-inp
 document.getElementsByClassName('search-container')[0].appendChild(searchForm);
 
 
-/*** create a search function it takes the input from the input field and search through
-     the array of cards on the page, block every card, show just the matched ones ***/
+/***
 
+create a search function it takes the input from the input field and search through
+the array of cards on the page, block every card, show just the matched ones
+
+***/
 
 
 // every user card on the page
@@ -272,6 +277,8 @@ const userCards = document.getElementsByClassName('card');
 
 
 //function to filter through the names, to show the results
+
+let searchArray =[];
 
 const search = (input) => {
 
@@ -295,7 +302,20 @@ searchForm.addEventListener('keyup', (e) => {
 
   search(e.target);
 
+  if(e.target.value === ''){
 
-
+    for (var i = 0; i < userCards.length; i++) {
+      userCards[i].style.display = '';
+    }
+  }
 
 });
+
+
+
+
+  /*searchArray.map(card => {
+  let searchResults = card.getElementsByTagName('h3');
+  findIndex(searchResults.name.innerText);
+  console.log(card);
+});*/
