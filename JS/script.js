@@ -2,7 +2,7 @@
 
 //stores data of the current fetched users
 const currentUser = [];
-const toggleDiv = document.getElementsByClassName('modal-container');
+
 
 
 
@@ -143,7 +143,7 @@ const modalHTML = (user) => {
 
   document.body.appendChild(modalDiv);
 
-    // Event listeners
+  // Event listeners
 
   // X button remove the modalDiv
 
@@ -191,6 +191,8 @@ function findIndex(input) {
       index = i;
     }
   }
+
+
 }
 
 /***
@@ -203,18 +205,18 @@ calls modalHTML again to move forward or backwards in the currrent user list
 function toggle(direction) {
   if (direction === 'next') {
     index += 1;
-      if (index === currentUser.length) {
-        index = 0;
-      }
+    if (index === currentUser.length) {
+      index = 0;
+    }
 
     modalHTML(currentUser[index]);
 
 
-  }else if(direction === 'prev') {
+  } else if (direction === 'prev') {
     index -= 1;
-      if (index < 0) {
-        index = currentUser.length -1;
-      }
+    if (index < 0) {
+      index = currentUser.length - 1;
+    }
     modalHTML(currentUser[index]);
   }
 }
@@ -278,7 +280,7 @@ const userCards = document.getElementsByClassName('card');
 
 //function to filter through the names, to show the results
 
-let searchArray =[];
+
 
 const search = (input) => {
 
@@ -301,20 +303,29 @@ searchForm.addEventListener('keyup', (e) => {
 
 
   search(e.target);
+  for (var i = 0; i < userCards.length; i++) {
+    if (e.target.value === '') {
 
-  if(e.target.value === ''){
 
-    for (var i = 0; i < userCards.length; i++) {
       userCards[i].style.display = '';
+
     }
+
+    if (userCards[i].style.display === 'none') {
+      index = i;
+
+    }
+
   }
+
+
 
 });
 
 
 
 
-  /*searchArray.map(card => {
+/*searchArray.map(card => {
   let searchResults = card.getElementsByTagName('h3');
   findIndex(searchResults.name.innerText);
   console.log(card);
