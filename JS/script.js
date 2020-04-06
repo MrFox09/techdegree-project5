@@ -1,9 +1,10 @@
 /*jshint esversion: 8 */
 
-//stores data of the current fetched users
+//iniatly stores data of the current users,changes when needed, depends on the search function
 let currentUser = [];
 
-let initalCurrentUser = [];
+//stores the fetched objects to a variable
+const initalCurrentUser = [];
 
 
 
@@ -49,6 +50,7 @@ function checkStatus(response) {
 
 /***
 Takes a user(object) as a paramter.
+Iterates through the objects in the array.
 Builds the HTML to show every user.
  ***/
 
@@ -98,7 +100,7 @@ const galleryHTML = (user) => {
       });
 
 
-      //save/push current (fetched) user objects to a variable, currentUser
+      //initaly save/push current (fetched) user objects to a variable, currentUser
 
       currentUser.push(user);
 
@@ -157,7 +159,7 @@ const modalHTML = (user) => {
   });
 
 
-  // prev button, remove the curren modalDiv and call the toggle function with the direction as
+  // prev button, remove the current modalDiv and call the toggle function with the direction as
   // an argument
 
   document.getElementById('modal-prev').addEventListener('click', () => {
@@ -166,7 +168,7 @@ const modalHTML = (user) => {
 
   });
 
-  // next button,remove the curren modalDiv and call the toggle function with the direction as
+  // next button,remove the current modalDiv and call the toggle function with the direction as
   // an argument
 
   document.getElementById('modal-next').addEventListener('click', (e) => {
@@ -179,7 +181,7 @@ const modalHTML = (user) => {
 
 
 /***
-when the card is clicked the findIndex function will run till the name matches in the currentUser array,
+when the user-card is clicked, the findIndex function will run, till the name matches in the currentUser array,
 stores the index in the index variable
 ***/
 
@@ -225,7 +227,8 @@ function toggle(direction) {
 
 /***
 triggers the fetchUser function and iterates through the array of objects -->
-call galleryHTML function for every user
+call galleryHTML function for every user and creates the initalCurrentUser array
+to save every users object
  ***/
 
 
@@ -265,7 +268,7 @@ document.getElementsByClassName('search-container')[0].appendChild(searchForm);
 
 
 /***
-create a search function it takes the input from the input field and search through
+create a search function, takes the input from the input field and search through
 the array of cards on the page, block every card, show just the matched ones
 ***/
 
@@ -273,11 +276,10 @@ the array of cards on the page, block every card, show just the matched ones
 // every user card on the page
 const userCards = document.getElementsByClassName('card');
 
-
-
-//function to filter through the names, to show the results
-
 let searchResultsIndex = [];
+
+
+//function to filter through the names, to show the results and store the matched index to a variable
 
 const search = (input) => {
 
@@ -291,31 +293,39 @@ const search = (input) => {
 
     if (input.value.length != 0 && userNames[i].innerText.toLowerCase().includes(input.value.toLowerCase())) {
       userCards[i].style.display = '';
+
+      //push the matched index to a variable
       searchResultsIndex.push(i);
+
 
     }
 
 
   }
-  createSearchResultArray(currentUser, searchResultsIndex);
+
+  // call the function to get a new array(objects) which matched the search
+  createSearchResultArray(initalCurrentUser, searchResultsIndex);
+
 };
 
-// event listener for the searchfield
+// keyup event listener for the searchfield
 
 searchForm.addEventListener('keyup', (e) => {
 
+//everytime the listener fires the arrays should be empty
   newArray = [];
   searchResultsIndex = [];
+  currentUser = newArray;
 
-  console.log(newArray);
 
-
+// call the search function
   search(e.target);
 
 
   for (var i = 0; i < userCards.length; i++) {
     if (e.target.value === '') {
 
+      currentUser = initalCurrentUser;
 
       userCards[i].style.display = '';
 
@@ -323,6 +333,11 @@ searchForm.addEventListener('keyup', (e) => {
   }
 });
 
+
+/***
+function who takes an array and and an array with index numbers as an input,
+to create a new Array(searchresults)
+***/
 
 let newArray = [];
 
