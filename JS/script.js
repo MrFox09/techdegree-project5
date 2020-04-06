@@ -52,7 +52,7 @@ function checkStatus(response) {
 /***
 
 Takes a user(object) as a paramter.
-Builds the HTML to show every user in his own card.
+Builds the HTML to show every user.
 
  ***/
 
@@ -89,6 +89,9 @@ const galleryHTML = (user) => {
   parentCardDiv.appendChild(infoDiv);
   galleryDiv.appendChild(parentCardDiv);
 
+  // event listener for each card and calls the modalHTML to create the pop up Windows
+  // and findIndex to find out which index the clicked card have, for scrolling through the pop ups
+
   parentCardDiv.addEventListener('click', () => {
 
     modalHTML(user);
@@ -104,7 +107,12 @@ const galleryHTML = (user) => {
 
 };
 
+/***
 
+Takes a user(object) as a paramter.
+Builds the modalHTML (Pop-up Windows) to show every user in his own card.
+
+ ***/
 
 
 const modalHTML = (user) => {
@@ -287,14 +295,17 @@ const search = (input) => {
   //save the names only
 
   const userNames = document.getElementsByTagName('h3');
+  let searchResultsIndex= [];
 
   for (let i = 0; i < userCards.length; i++) {
     userCards[i].style.display = 'none';
 
     if (input.value.length != 0 && userNames[i].innerText.toLowerCase().includes(input.value.toLowerCase())) {
       userCards[i].style.display = '';
+      searchResults.push(i);
     }
   }
+  console.log(searchResults);
 };
 
 // event listener for the searchfield
@@ -310,23 +321,5 @@ searchForm.addEventListener('keyup', (e) => {
       userCards[i].style.display = '';
 
     }
-
-    if (userCards[i].style.display === 'none') {
-      index = i;
-
-    }
-
   }
-
-
-
 });
-
-
-
-
-/*searchArray.map(card => {
-  let searchResults = card.getElementsByTagName('h3');
-  findIndex(searchResults.name.innerText);
-  console.log(card);
-});*/
