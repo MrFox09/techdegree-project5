@@ -1,3 +1,4 @@
+
 /*jshint esversion: 8 */
 
 //stores data of the current fetched users
@@ -8,11 +9,9 @@ const currentUser = [];
 
 
 /***
-
 a function to make an API request. Takes a url as input and return a promise,
 parse it to an JS object,
 logs an error when something goes wron
-
 ***/
 
 const fetchUser = async (url) => {
@@ -33,10 +32,8 @@ const fetchUser = async (url) => {
 
 
 /***
-
 Check the status of the response, if its ok, then return the resolved promise if not,
 reject it and creates an Error object with the error text inside
-
  ***/
 
 function checkStatus(response) {
@@ -50,10 +47,8 @@ function checkStatus(response) {
 
 
 /***
-
 Takes a user(object) as a paramter.
 Builds the HTML to show every user.
-
  ***/
 
 
@@ -108,10 +103,8 @@ const galleryHTML = (user) => {
 };
 
 /***
-
 Takes a user(object) as a paramter.
 Builds the modalHTML (Pop-up Windows) to show every user in his own card.
-
  ***/
 
 
@@ -142,7 +135,6 @@ const modalHTML = (user) => {
                 <p class="modal-text">${user.location.street.number} ${user.location.street.name} , ${user.location.state} ${user.location.postcode}</p>
                 <p class="modal-text">Birthday: ${year}/${date}/${month}</p>
             </div>
-
             <div class="modal-btn-container">
                 <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
                 <button type="button" id="modal-next" class="modal-next btn">Next</button>
@@ -183,10 +175,8 @@ const modalHTML = (user) => {
 
 
 /***
-
 when the card is clicked the findIndex function will run till the name matches in the currentUser array,
 stores the index in the index variable
-
 ***/
 
 let index = 0;
@@ -204,10 +194,8 @@ function findIndex(input) {
 }
 
 /***
-
 takes the direction from the modalHTML event listener as an input,
 calls modalHTML again to move forward or backwards in the currrent user list
-
 ***/
 
 function toggle(direction) {
@@ -232,10 +220,8 @@ function toggle(direction) {
 
 
 /***
-
 triggers the fetchUser function and iterates through the array of objects -->
 call galleryHTML function for every user
-
  ***/
 
 
@@ -254,9 +240,7 @@ fetchUser('https://randomuser.me/api/?nat=gb&results=12')
 
 
 /***
-
 Search section
-
  ***/
 
 //add search field to webpage
@@ -274,10 +258,8 @@ document.getElementsByClassName('search-container')[0].appendChild(searchForm);
 
 
 /***
-
 create a search function it takes the input from the input field and search through
 the array of cards on the page, block every card, show just the matched ones
-
 ***/
 
 
@@ -302,10 +284,10 @@ const search = (input) => {
 
     if (input.value.length != 0 && userNames[i].innerText.toLowerCase().includes(input.value.toLowerCase())) {
       userCards[i].style.display = '';
-      searchResults.push(i);
+      searchResultsIndex.push(i);
     }
   }
-  console.log(searchResults);
+  
 };
 
 // event listener for the searchfield
