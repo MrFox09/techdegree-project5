@@ -1,8 +1,9 @@
-
 /*jshint esversion: 8 */
 
 //stores data of the current fetched users
-const currentUser = [];
+let currentUser = [];
+
+let initalCurrentUser = [];
 
 
 
@@ -54,53 +55,56 @@ Builds the HTML to show every user.
 
 
 const galleryHTML = (user) => {
-  const galleryDiv = document.getElementById('gallery');
+
+  user.forEach((user) => {
+      const galleryDiv = document.getElementById('gallery');
 
 
-  const parentCardDiv = document.createElement('div');
-  parentCardDiv.setAttribute('class', 'card');
+      const parentCardDiv = document.createElement('div');
+      parentCardDiv.setAttribute('class', 'card');
 
-  const imgDiv = document.createElement('div');
-  imgDiv.setAttribute('class', 'card-img-container');
+      const imgDiv = document.createElement('div');
+      imgDiv.setAttribute('class', 'card-img-container');
 
-  parentCardDiv.appendChild(imgDiv);
+      parentCardDiv.appendChild(imgDiv);
 
-  const img = document.createElement('img');
+      const img = document.createElement('img');
 
-  img.setAttribute('class', 'card-img');
-  img.setAttribute('src', `${user.picture.large}`);
-  img.setAttribute('alt', 'profile picture');
+      img.setAttribute('class', 'card-img');
+      img.setAttribute('src', `${user.picture.large}`);
+      img.setAttribute('alt', 'profile picture');
 
-  imgDiv.appendChild(img);
+      imgDiv.appendChild(img);
 
-  const infoDiv = document.createElement('div');
-  infoDiv.setAttribute('class', 'card-info-container');
+      const infoDiv = document.createElement('div');
+      infoDiv.setAttribute('class', 'card-info-container');
 
-  infoDiv.innerHTML = `<h3 id="name" class="card-name cap">${user.name.first} ${user.name.last}</h3>
+      infoDiv.innerHTML = `<h3 id="name" class="card-name cap">${user.name.first} ${user.name.last}</h3>
                       <p class="card-text">${user.email}</p>
                       <p class="card-text cap">${user.location.city}, ${user.location.state}</p>`;
 
 
-  parentCardDiv.appendChild(infoDiv);
-  galleryDiv.appendChild(parentCardDiv);
+      parentCardDiv.appendChild(infoDiv);
+      galleryDiv.appendChild(parentCardDiv);
 
-  // event listener for each card and calls the modalHTML to create the pop up Windows
-  // and findIndex to find out which index the clicked card have, for scrolling through the pop ups
+      // event listener for each card and calls the modalHTML to create the pop up Windows
+      // and findIndex to find out which index the clicked card have, for scrolling through the pop ups
 
-  parentCardDiv.addEventListener('click', () => {
+      parentCardDiv.addEventListener('click', () => {
 
-    modalHTML(user);
-    findIndex(`${user.name.first} ${user.name.last}`);
+        modalHTML(user);
+        findIndex(`${user.name.first} ${user.name.last}`);
 
-  });
-
-
-  //save/push current (fetched) user objects to a variable, currentUser
-
-  currentUser.push(user);
+      });
 
 
-};
+      //save/push current (fetched) user objects to a variable, currentUser
+
+      currentUser.push(user);
+
+
+    });
+  };
 
 /***
 Takes a user(object) as a paramter.
@@ -230,9 +234,12 @@ fetchUser('https://randomuser.me/api/?nat=gb&results=12')
 
   .then((data) => {
 
+    galleryHTML(data);
+
     data.map(user => {
 
-      galleryHTML(user);
+
+      initalCurrentUser.push(user);
 
     });
   });
@@ -270,14 +277,14 @@ const userCards = document.getElementsByClassName('card');
 
 //function to filter through the names, to show the results
 
-
+let searchResultsIndex = [];
 
 const search = (input) => {
 
   //save the names only
 
   const userNames = document.getElementsByTagName('h3');
-  let searchResultsIndex= [];
+
 
   for (let i = 0; i < userCards.length; i++) {
     userCards[i].style.display = 'none';
@@ -285,17 +292,27 @@ const search = (input) => {
     if (input.value.length != 0 && userNames[i].innerText.toLowerCase().includes(input.value.toLowerCase())) {
       userCards[i].style.display = '';
       searchResultsIndex.push(i);
+
     }
+
+
   }
-  
+  createSearchResultArray(currentUser, searchResultsIndex);
 };
 
 // event listener for the searchfield
 
 searchForm.addEventListener('keyup', (e) => {
 
+  newArray = [];
+  searchResultsIndex = [];
+
+  console.log(newArray);
+
 
   search(e.target);
+
+
   for (var i = 0; i < userCards.length; i++) {
     if (e.target.value === '') {
 
@@ -305,3 +322,17 @@ searchForm.addEventListener('keyup', (e) => {
     }
   }
 });
+
+
+let newArray = [];
+
+function createSearchResultArray(arrayAll, matchIndex) {
+
+
+  for (let i = 0; i < matchIndex.length; i++) {
+
+    newArray.push(arrayAll[matchIndex[i]]);
+
+
+  }
+}
